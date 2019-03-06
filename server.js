@@ -26,7 +26,11 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-// Connect to the Mongo DB
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 mongoose.connect("mongodb://localhost/homework19", { useNewUrlParser: true });
 
 // Routes
@@ -81,9 +85,11 @@ app.get("/scrape", function(req, res) {
 
     console.log(result);
     // return result;
-
+    const articles = {
+      articles: result
+    }
     // Send a message to the client
-    res.send(result);
+    res.render("index", result);
   });
 
 
